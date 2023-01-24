@@ -26,32 +26,18 @@ export default class UserService {
   }
 
   static async validate(token: string): Promise<validResponse> {
-    const isValid = verifyToken(token);
+    const validToken = verifyToken(token);
 
-    if (typeof isValid === 'string') {
-      return { type: 'NOT_FOUND', message: 'Invalid Token' };
+    if (typeof validToken === 'string') {
+      return { type: 'ERROR', message: 'Invalid Token' };
     }
-    const findUser = await User.findOne({ where: { email: isValid.data.email } });
 
-    if (!findUser) {
-      return { type: 'NOT_FOUND', message: 'user not found' };
+    const user = await User.findOne({ where: { email: validToken.data.email } });
+
+    if (!user) {
+      return { type: 'ERROR', message: 'user not found' };
     }
-    return { type: null, message: findUser.dataValues.role };
+
+    return { type: 'ok', message: user.dataValues.role };
   }
-
-  // static async validate(token: string): Promise<validResponse> {
-  //   const validToken = verifyToken(token);
-
-  //   if (typeof validToken === 'string') {
-  //     return { type: 'ERROR', message: 'Invalid Token' };
-  //   }
-
-  //   const user = await User.findOne({ where: { email: validToken.data.email } });
-
-  //   if (!user) {
-  //     return { type: 'ERROR', message: 'user not found' };
-  //   }
-
-  //   return { type: 'ok', message: user.dataValues.role };
-  // }
 }

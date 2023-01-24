@@ -1,5 +1,5 @@
 import * as express from 'express';
-import UserRouter from './router/User.routes';
+import Router from './router/routes';
 import userMiddleware from './middlewares/user.middleware';
 
 class App {
@@ -15,9 +15,12 @@ class App {
     this.app.post(
       '/login',
       userMiddleware.validationFilds,
-      UserRouter,
+      Router,
     );
-    this.app.get('/login/validate', UserRouter);
+    this.app.get('/login/validate', Router);
+    this.app.get('/teams', Router);
+    this.app.get('/teams/:id', Router);
+    this.app.get('/matches', Router);
   }
 
   private config():void {

@@ -5,5 +5,5 @@ export interface Login {
 
 export interface validResponse {
   type: string | null,
-  message: string,
+  message: string | object,
 }

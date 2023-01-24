@@ -15,19 +15,11 @@ export default class UserController {
     return res.status(200).json({ token: result.message });
   }
 
-  // static async validate(req: Request, res: Response) {
-  //   const token = req.header('Authorization');
-  //   if (!token) return res.status(400).json({ message: 'Token not found' });
-  //   const result = await UserService.validate(token);
-  //   if (result.type === 'ERROR') return res.status(401).json({ message: result.message });
-  //   if (result.type === 'NOT_FOUND') return res.status(401).json({ message: result.message });
-  //   return res.status(200).json({ role: result.message });
-  // }
   static async validate(req: Request, res: Response) {
     const token = req.header('Authorization');
     if (!token) return res.status(400).json({ message: 'Token not found' });
-    const { type, message } = await UserService.validate(token);
-    if (type) return res.status(401).json({ message });
-    return res.status(200).json({ role: message });
+    const result = await UserService.validate(token);
+    if (result.type === 'ERROR') return res.status(401).json({ message: result.message });
+    return res.status(200).json({ role: result.message });
   }
 }

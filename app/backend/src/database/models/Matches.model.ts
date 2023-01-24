@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '.';
 
-export default class Match extends Model {
+export default class Matches extends Model {
   declare id: number;
   declare homeTeamId: number;
   declare homeTeamGoals: number;
@@ -10,7 +10,7 @@ export default class Match extends Model {
   declare inProgress: boolean;
 }
 
-Match.init({
+Matches.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -40,7 +40,7 @@ Match.init({
   // ... Outras configs
   underscored: true,
   sequelize: db,
-  modelName: 'Match',
+  modelName: 'Matches',
   timestamps: false,
-  tableName: 'matchs',
+  tableName: 'matches',
 });
