@@ -9,8 +9,8 @@ export interface validResponse {
 }
 
 export interface Matche {
-  homeTeamId: number,
-  awayTeamId: number,
+  homeTeamId?: number,
+  awayTeamId?: number,
   homeTeamGoals: number,
   awayTeamGoals: number,
 }

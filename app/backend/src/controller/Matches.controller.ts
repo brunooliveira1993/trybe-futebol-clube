@@ -30,4 +30,11 @@ export default class matchController {
     const finished = await MatcheService.finish(Number(id));
     return res.status(200).json(finished.message);
   }
+
+  static async updateMatche(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const goalTeam = await MatcheService.update(Number(id), req.body);
+    if (goalTeam.type === 'INCORRECT') return res.status(400).json({ message: goalTeam.message });
+    return res.status(200).json(goalTeam.message);
+  }
 }

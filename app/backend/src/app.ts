@@ -19,6 +19,7 @@ class App {
     this.app.get('/matches', Router);
     this.app.post('/matches', Middleware.validationToken, Middleware.validationTeams, Router);
     this.app.patch('/matches/:id/finish', Middleware.validationToken, Router);
+    this.app.patch('/matches/:id', Middleware.validationToken, Router);
   }
 
   private config():void {

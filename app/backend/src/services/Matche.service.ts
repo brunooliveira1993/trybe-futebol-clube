@@ -47,4 +47,16 @@ export default class matcheServices {
     await Matches.update({ inProgress: false }, { where: { id } });
     return { type: 'ok', message: 'Finished' };
   }
+
+  static async update(
+    id: number,
+    { homeTeamGoals, awayTeamGoals }: Matche,
+  ): Promise<validResponse> {
+    if (!homeTeamGoals || !awayTeamGoals) {
+      return { type: 'INCORRECT', message: 'is required' };
+    }
+    await Matches.update({ homeTeamGoals }, { where: { id } });
+    await Matches.update({ awayTeamGoals }, { where: { id } });
+    return { type: 'ok', message: 'GOOOOOOOOAAAAALLL' };
+  }
 }

@@ -17,5 +17,6 @@ router.get('/teams/:id', teamController.getOne);
 router.get('/matches', matchController.getByFilter);
 router.post('/matches', matchController.createMatche);
 router.patch('/matches/:id/finish', matchController.finishMatche);
+router.patch('/matches/:id', matchController.updateMatche);
 
 export default router;
