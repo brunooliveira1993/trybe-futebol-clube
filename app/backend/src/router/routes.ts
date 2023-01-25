@@ -14,6 +14,7 @@ router.get('/teams', teamController.getAll);
 router.get('/teams/:id', teamController.getOne);
 
 // Matches Router
+router.get('/matches?', matchController.getByFilter);
 router.get('/matches', matchController.getAll);
 
 export default router;

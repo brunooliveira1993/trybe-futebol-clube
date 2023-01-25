@@ -8,4 +8,10 @@ export default class matchController {
     const result = await MatcheService.find();
     return res.status(200).json(result);
   }
+
+  static async getByFilter(req: Request, res: Response): Promise<Response> {
+    const filter = req.query.inProgress === 'true';
+    const matches = await MatcheService.filter(filter);
+    return res.status(200).json(matches);
+  }
 }

@@ -20,6 +20,7 @@ class App {
     this.app.get('/login/validate', Router);
     this.app.get('/teams', Router);
     this.app.get('/teams/:id', Router);
+    this.app.get('/matches?', Router);
     this.app.get('/matches', Router);
   }
 
