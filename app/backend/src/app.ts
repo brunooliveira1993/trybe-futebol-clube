@@ -1,6 +1,6 @@
 import * as express from 'express';
 import Router from './router/routes';
-import userMiddleware from './middlewares/user.middleware';
+import Middleware from './middlewares/user.middleware';
 
 class App {
   public app: express.Express;
@@ -12,17 +12,13 @@ class App {
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
-    this.app.post(
-      '/login',
-      userMiddleware.validationFilds,
-      Router,
-    );
+    this.app.post('/login', Middleware.validationFilds, Router);
     this.app.get('/login/validate', Router);
     this.app.get('/teams', Router);
     this.app.get('/teams/:id', Router);
     this.app.get('/matches', Router);
-    // this.app.get('/matches', Router);
-    this.app.post('/matches', Router);
+    this.app.post('/matches', Middleware.validationToken, Middleware.validationTeams, Router);
+    this.app.patch('/matches/:id/finish', Middleware.validationToken, Router);
   }
 
   private config():void {

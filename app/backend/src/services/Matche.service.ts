@@ -27,8 +27,9 @@ export default class matcheServices {
   static async insert({ homeTeamId, awayTeamId,
     homeTeamGoals, awayTeamGoals }: Matche): Promise<validResponse> {
     const inProgress = true;
-    if (!homeTeamId || !awayTeamId || !homeTeamGoals || !awayTeamGoals) {
-      return { type: 'REQUIRED', message: 'is required' };
+    if (homeTeamId === awayTeamId) {
+      return { type: 'INVALID',
+        message: 'It is not possible to create a match with two equal teams' };
     }
     const newMatche = await Matches.create({
       homeTeamId,
@@ -38,5 +39,12 @@ export default class matcheServices {
       inProgress,
     });
     return { type: 'ok', message: newMatche };
+  }
+
+  static async finish(id: number): Promise<validResponse> {
+    const matche = await Matches.findOne({ where: { id } });
+    if (!matche) return { type: 'NOT FOUND', message: 'match not found' };
+    await Matches.update({ inProgress: false }, { where: { id } });
+    return { type: 'ok', message: 'Finished' };
   }
 }

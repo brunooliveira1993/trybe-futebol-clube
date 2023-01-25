@@ -21,7 +21,13 @@ export default class matchController {
 
   static async createMatche(req: Request, res: Response): Promise<Response> {
     const newMatche = await MatcheService.insert(req.body);
-    if (newMatche.type === 'REQUIRED') return res.status(400).json(newMatche.message);
-    return res.status(200).json(newMatche.message);
+    if (newMatche.type === 'INVALID') return res.status(422).json({ message: newMatche.message });
+    return res.status(201).json(newMatche.message);
+  }
+
+  static async finishMatche(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const finished = await MatcheService.finish(Number(id));
+    return res.status(200).json(finished.message);
   }
 }

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import Matches from '../database/models/Matches.model';
 
 dotenv.config();
 
@@ -33,7 +34,21 @@ const validationToken = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const validationTeams = async (req: Request, res: Response, next: NextFunction) => {
+  const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
+  if (!homeTeamId || !awayTeamId || !homeTeamGoals || !awayTeamGoals) {
+    return res.status(400).json({ message: 'is required' });
+  }
+  const homeTeam = await Matches.findOne({ where: { homeTeamId } });
+  const awayTeam = await Matches.findOne({ where: { awayTeamId } });
+  if (!homeTeam || !awayTeam) {
+    return res.status(404).json({ message: 'There is no team with such id!' });
+  }
+  return next();
+};
+
 export default {
   validationToken,
   validationFilds,
+  validationTeams,
 };
