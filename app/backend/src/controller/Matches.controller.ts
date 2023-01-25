@@ -10,8 +10,18 @@ export default class matchController {
   }
 
   static async getByFilter(req: Request, res: Response): Promise<Response> {
+    if (!req.query.inProgress) {
+      const result = await MatcheService.find();
+      return res.status(200).json(result);
+    }
     const filter = req.query.inProgress === 'true';
     const matches = await MatcheService.filter(filter);
     return res.status(200).json(matches);
+  }
+
+  static async createMatche(req: Request, res: Response): Promise<Response> {
+    const newMatche = await MatcheService.insert(req.body);
+    if (newMatche.type === 'REQUIRED') return res.status(400).json(newMatche.message);
+    return res.status(200).json(newMatche.message);
   }
 }
