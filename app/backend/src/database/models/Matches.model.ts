@@ -8,7 +8,11 @@ export default class Matches extends Model {
   declare awayTeamId: number;
   declare awayTeamGoals: number;
   declare inProgress: boolean;
-  TeamGoalsId: any;
+  // TeamGoalsId: any;
+  totalPoints: any;
+  goalsBalance: any;
+  goalsFavor: any;
+  goalsOwn: any;
 }
 
 Matches.init({

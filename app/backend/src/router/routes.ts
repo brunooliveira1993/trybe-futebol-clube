@@ -21,6 +21,7 @@ router.patch('/matches/:id/finish', matchController.finishMatche);
 router.patch('/matches/:id', matchController.updateMatche);
 
 // Leaderboard Router
-router.get('/leaderboard/home', LeaderbordController.getAll);
+router.get('/leaderboard/home', LeaderbordController.getAllHomeResultStats);
+router.get('/leaderboard/away', LeaderbordController.getAllAwayResultStats);
 
 export default router;
