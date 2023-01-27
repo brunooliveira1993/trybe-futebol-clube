@@ -17,6 +17,7 @@ class App {
     this.app.get('/teams', Router);
     this.app.get('/teams/:id', Router);
     this.app.get('/matches', Router);
+    this.app.get('/leaderboard/home', Router);
     this.app.post('/matches', Middleware.validationToken, Middleware.validationTeams, Router);
     this.app.patch('/matches/:id/finish', Middleware.validationToken, Router);
     this.app.patch('/matches/:id', Middleware.validationToken, Router);

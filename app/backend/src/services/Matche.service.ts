@@ -1,4 +1,3 @@
-// import { WhereOptions } from 'sequelize';
 import Matches from '../database/models/Matches.model';
 import Team from '../database/models/Team.model';
 import { validResponse, Matche } from './interfaces';

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import UserController from '../controller/User.controller';
 import teamController from '../controller/Teams.controller';
 import matchController from '../controller/Matches.controller';
+import LeaderbordController from '../controller/Leaderboard.controller';
 
 const router = Router();
 
@@ -18,5 +19,8 @@ router.get('/matches', matchController.getByFilter);
 router.post('/matches', matchController.createMatche);
 router.patch('/matches/:id/finish', matchController.finishMatche);
 router.patch('/matches/:id', matchController.updateMatche);
+
+// Leaderboard Router
+router.get('/leaderboard/home', LeaderbordController.getAll);
 
 export default router;
