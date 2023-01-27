@@ -9,6 +9,8 @@ export default class LeaderboardService {
     (await homeTeamsStats).sort((a: any, b: any) => b.goalsBalance - a.goalsBalance);
     (await homeTeamsStats).sort((a: any, b: any) => b.totalPoints - a.totalPoints);
     return homeTeamsStats;
+    // const result = await stats.homeTeamsResult();
+    // return result;
   }
 
   static async findAllAwayTeams() {

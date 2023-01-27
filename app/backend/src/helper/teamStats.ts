@@ -1,3 +1,4 @@
+import console = require('console');
 import Matches from '../database/models/Matches.model';
 import TeamModel from '../database/models/Team.model';
 import { IMatch } from './interface';
@@ -22,22 +23,30 @@ const calculateAwayPoints = async (matche: any[]) => {
 
 const getPoints = async (matche: any[], victory: string) => {
   if (victory === 'away') return calculateAwayPoints(matche);
-  return calculateHomePoints(matche);
+  if (victory === 'home') return calculateHomePoints(matche);
+  return 0;
+};
+
+const calculateAwayVictories = async (matche: any[]) => {
+  let victories = 0;
+  matche.forEach((match: { homeTeamGoals: number; awayTeamGoals: number; }) => {
+    if (match.homeTeamGoals < match.awayTeamGoals) victories += 1;
+  });
+  return victories;
+};
+
+const calculateHomeVictories = async (matche: any[]) => {
+  let victories = 0;
+  matche.forEach((match: { homeTeamGoals: number; awayTeamGoals: number; }) => {
+    if (match.homeTeamGoals > match.awayTeamGoals) victories += 1;
+    console.log(match.homeTeamGoals);
+  });
+  return victories;
 };
 
 const getVictories = async (matche: any[], victory: string) => {
-  let victories = 0;
-  if (victory === 'away') {
-    matche.forEach((match) => {
-      if (match.homeTeamGoals < match.awayTeamGoals) victories += 1;
-    });
-  }
-  if (victory === 'home') {
-    matche.forEach((match) => {
-      if (match.homeTeamGoals > match.awayTeamGoals) victories += 1;
-    });
-  }
-  return victories;
+  if (victory === 'home') return calculateHomeVictories(matche);
+  if (victory === 'away') return calculateAwayVictories(matche);
 };
 
 const getDraws = async (matche: any[], _victory: string) => {
@@ -93,7 +102,24 @@ const getGoalsOwn = async (matche: any[], victory: string) => {
   return goalsOwn;
 };
 
-const teamStats = async (matches: IMatch[], victory: string) => {
+const teamHomeStats = async (matches: IMatch[], victory: string) => {
+  const score = ((await getPoints(matches, victory) / (matches.length * 3)) * 100);
+  const teamScore = {
+    name: matches[0].homeTeam?.teamName,
+    totalPoints: await getPoints(matches, victory),
+    totalGames: matches.length,
+    totalVictories: await getVictories(matches, victory),
+    totalDraws: await getDraws(matches, victory),
+    totalLosses: await getLoses(matches, victory),
+    goalsFavor: await getGoalsFavor(matches, victory),
+    goalsOwn: await getGoalsOwn(matches, victory),
+    goalsBalance: await getGoalsFavor(matches, victory) - await getGoalsOwn(matches, victory),
+    efficiency: Math.round(score * 100) / 100,
+  };
+  return teamScore;
+};
+
+const teamAwayStats = async (matches: IMatch[], victory: string) => {
   const score = ((await getPoints(matches, victory) / (matches.length * 3)) * 100);
   const teamScore = {
     name: matches[0].awayTeam?.teamName,
@@ -181,7 +207,7 @@ const getHomeStats = async () => {
   const homeTeams = await homeTeamsResult();
   const teams: any = [];
   homeTeams.map((team: IMatch[]) => {
-    const homeScore = teamStats(team, 'home');
+    const homeScore = teamHomeStats(team, 'home');
     teams.push(homeScore);
     return null;
   });
@@ -192,23 +218,15 @@ const getAwayStats = async () => {
   const awayTeams = await awayTeamsResult();
   const teams: any = [];
   awayTeams.map((team: IMatch[]) => {
-    const awayScore = teamStats(team, 'away');
+    const awayScore = teamAwayStats(team, 'away');
     teams.push(awayScore);
     return null;
   });
   return teams;
 };
 
-const sortTeamsStats = async () => {
-  const teamsStats = await getHomeStats();
-  teamsStats.sort((a: any, b: any) => a.goalsOwn - b.goalsOwn);
-  teamsStats.sort((a: any, b: any) => b.goalsFavor - a.goalsFavor);
-  teamsStats.sort((a: any, b: any) => b.goalsBalance - a.goalsBalance);
-  teamsStats.sort((a: any, b: any) => b.totalPoints - a.totalPoints);
-};
-
 export default {
   getHomeStats,
   getAwayStats,
-  sortTeamsStats,
+  homeTeamsResult,
 };
