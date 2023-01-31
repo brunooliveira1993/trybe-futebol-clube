@@ -1,4 +1,3 @@
-import console = require('console');
 import Matches from '../database/models/Matches.model';
 import TeamModel from '../database/models/Team.model';
 import { IMatch } from './interface';
@@ -39,7 +38,6 @@ const calculateHomeVictories = async (matche: any[]) => {
   let victories = 0;
   matche.forEach((match: { homeTeamGoals: number; awayTeamGoals: number; }) => {
     if (match.homeTeamGoals > match.awayTeamGoals) victories += 1;
-    console.log(match.homeTeamGoals);
   });
   return victories;
 };
@@ -225,8 +223,22 @@ const getAwayStats = async () => {
   return teams;
 };
 
+const teste = async () => {
+  const homeTeams = await getHomeStats();
+  const awayTeams = await getAwayStats();
+  function get(tes: any, teste2: any) {
+    return teste.name === teste2.name;
+  }
+  const result = (await homeTeams).map(async (home: any) => {
+    const test = awayTeams.find(get(home, (await awayTeams).map((away: any) => away)));
+    return test;
+  });
+  return result;
+};
+
 export default {
   getHomeStats,
   getAwayStats,
   homeTeamsResult,
+  teste,
 };

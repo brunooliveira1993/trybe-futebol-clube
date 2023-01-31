@@ -11,4 +11,9 @@ export default class LeaderbordController {
     const result = await LeaderboardService.findAllAwayTeams();
     return res.status(200).json(result);
   }
+
+  static async getTableStats(_req: Request, res: Response) {
+    const result = await LeaderboardService.getTeamStats();
+    return res.status(200).json(result);
+  }
 }

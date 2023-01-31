@@ -22,4 +22,10 @@ export default class LeaderboardService {
     (await awayTeamsStats).sort((a: any, b: any) => b.totalPoints - a.totalPoints);
     return awayTeamsStats;
   }
+
+  static async getTeamStats() {
+    const teste = await stats.teste();
+    const test = Promise.all(teste);
+    return test;
+  }
 }
