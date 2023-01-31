@@ -23,6 +23,6 @@ router.patch('/matches/:id', matchController.updateMatche);
 // Leaderboard Router
 router.get('/leaderboard/home', LeaderbordController.getAllHomeResultStats);
 router.get('/leaderboard/away', LeaderbordController.getAllAwayResultStats);
-router.get('/leaderboard/test', LeaderbordController.getTableStats);
+router.get('/leaderboard', LeaderbordController.getTableStats);
 
 export default router;

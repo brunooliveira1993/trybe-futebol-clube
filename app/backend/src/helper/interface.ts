@@ -1,4 +1,4 @@
-export default interface Stats {
+export interface IStats {
   name: string;
   totalPoints: number;
   totalGames: number;

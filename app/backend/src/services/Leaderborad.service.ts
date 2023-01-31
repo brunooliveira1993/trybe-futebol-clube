@@ -9,8 +9,6 @@ export default class LeaderboardService {
     (await homeTeamsStats).sort((a: any, b: any) => b.goalsBalance - a.goalsBalance);
     (await homeTeamsStats).sort((a: any, b: any) => b.totalPoints - a.totalPoints);
     return homeTeamsStats;
-    // const result = await stats.homeTeamsResult();
-    // return result;
   }
 
   static async findAllAwayTeams() {
@@ -24,8 +22,12 @@ export default class LeaderboardService {
   }
 
   static async getTeamStats() {
-    const teste = await stats.teste();
-    const test = Promise.all(teste);
-    return test;
+    const result = await stats.getAllStats();
+    const totalStats = Promise.all(result);
+    (await totalStats).sort((a: any, b: any) => a.goalsOwn - b.goalsOwn);
+    (await totalStats).sort((a: any, b: any) => b.goalsFavor - a.goalsFavor);
+    (await totalStats).sort((a: any, b: any) => b.goalsBalance - a.goalsBalance);
+    (await totalStats).sort((a: any, b: any) => b.totalPoints - a.totalPoints);
+    return totalStats;
   }
 }

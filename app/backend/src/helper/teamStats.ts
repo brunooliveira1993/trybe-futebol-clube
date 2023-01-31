@@ -99,7 +99,6 @@ const getGoalsOwn = async (matche: any[], victory: string) => {
   }
   return goalsOwn;
 };
-
 const teamHomeStats = async (matches: IMatch[], victory: string) => {
   const score = ((await getPoints(matches, victory) / (matches.length * 3)) * 100);
   const teamScore = {
@@ -116,7 +115,6 @@ const teamHomeStats = async (matches: IMatch[], victory: string) => {
   };
   return teamScore;
 };
-
 const teamAwayStats = async (matches: IMatch[], victory: string) => {
   const score = ((await getPoints(matches, victory) / (matches.length * 3)) * 100);
   const teamScore = {
@@ -133,7 +131,6 @@ const teamAwayStats = async (matches: IMatch[], victory: string) => {
   };
   return teamScore;
 };
-
 const finishMatches = async () => {
   const matches = await Matches.findAll(
     { where: { inProgress: 'false' },
@@ -144,7 +141,6 @@ const finishMatches = async () => {
   );
   return matches;
 };
-
 const getHomeTeams = async () => {
   const matches = await finishMatches();
   const homeTeams: number[] = [];
@@ -157,7 +153,6 @@ const getHomeTeams = async () => {
   });
   return homeTeams;
 };
-
 const getAwayTeams = async () => {
   const matches = await finishMatches();
   const awayTeams: any = [];
@@ -170,7 +165,6 @@ const getAwayTeams = async () => {
   });
   return awayTeams;
 };
-
 const awayTeamsResult = async () => {
   const awayTeams = await getAwayTeams();
   const matches = await finishMatches();
@@ -185,7 +179,6 @@ const awayTeamsResult = async () => {
   });
   return teams;
 };
-
 const homeTeamsResult = async () => {
   const homeTeams = await getHomeTeams();
   const matches = await finishMatches();
@@ -200,7 +193,6 @@ const homeTeamsResult = async () => {
   });
   return teams;
 };
-
 const getHomeStats = async () => {
   const homeTeams = await homeTeamsResult();
   const teams: any = [];
@@ -211,7 +203,6 @@ const getHomeStats = async () => {
   });
   return teams;
 };
-
 const getAwayStats = async () => {
   const awayTeams = await awayTeamsResult();
   const teams: any = [];
@@ -222,23 +213,38 @@ const getAwayStats = async () => {
   });
   return teams;
 };
-
-const teste = async () => {
-  const homeTeams = await getHomeStats();
-  const awayTeams = await getAwayStats();
-  function get(tes: any, teste2: any) {
-    return teste.name === teste2.name;
-  }
-  const result = (await homeTeams).map(async (home: any) => {
-    const test = awayTeams.find(get(home, (await awayTeams).map((away: any) => away)));
-    return test;
+const createTotalStats = async (home: any, away: any) => {
+  const totalPoints = home.totalPoints + away.totalPoints;
+  const totalGames = home.totalGames + away.totalGames;
+  const score = (totalPoints / (totalGames * 3)) * 100;
+  const obj = {
+    name: home.name,
+    totalPoints: home.totalPoints + away.totalPoints,
+    totalGames: home.totalGames + away.totalGames,
+    totalVictories: home.totalVictories + away.totalVictories,
+    totalDraws: home.totalDraws + away.totalDraws,
+    totalLosses: home.totalLosses + away.totalLosses,
+    goalsFavor: home.goalsFavor + away.goalsFavor,
+    goalsOwn: home.goalsOwn + away.goalsOwn,
+    goalsBalance: home.goalsBalance + away.goalsBalance,
+    efficiency: Math.round(score * 100) / 100,
+  };
+  return obj;
+};
+const getAllStats = async () => {
+  const homeTeams = await Promise.all(await getHomeStats());
+  const awayTeams = await Promise.all(await getAwayStats());
+  const newObj = homeTeams.map((home: any) => {
+    const away: any = awayTeams.find((item: any) => item.name === home.name);
+    const object = createTotalStats(home, away);
+    return object;
   });
-  return result;
+  return newObj;
 };
 
 export default {
   getHomeStats,
   getAwayStats,
   homeTeamsResult,
-  teste,
+  getAllStats,
 };
