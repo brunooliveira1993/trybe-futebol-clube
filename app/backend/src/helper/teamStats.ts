@@ -144,7 +144,7 @@ const finishMatches = async () => {
 const getHomeTeams = async () => {
   const matches = await finishMatches();
   const homeTeams: number[] = [];
-  matches.forEach((match) => {
+  matches.forEach((match: { dataValues: { homeTeamId: number; }; }) => {
     if (!homeTeams
       .includes(match.dataValues.homeTeamId)) {
       homeTeams
@@ -156,7 +156,7 @@ const getHomeTeams = async () => {
 const getAwayTeams = async () => {
   const matches = await finishMatches();
   const awayTeams: any = [];
-  matches.forEach((match) => {
+  matches.forEach((match: { dataValues: { awayTeamId: any; }; }) => {
     if (!awayTeams
       .includes(match.dataValues.awayTeamId)) {
       awayTeams
@@ -170,7 +170,7 @@ const awayTeamsResult = async () => {
   const matches = await finishMatches();
   const teams: any = [];
   awayTeams.map((team: any) => {
-    const awayMatches = matches.filter((match) => {
+    const awayMatches = matches.filter((match: { dataValues: any; }) => {
       const { dataValues: awayTeamId } = match;
       return (awayTeamId.awayTeamId === team);
     });
@@ -184,7 +184,7 @@ const homeTeamsResult = async () => {
   const matches = await finishMatches();
   const teams: any = [];
   homeTeams.map((team) => {
-    const homeMatches = matches.filter((match) => {
+    const homeMatches = matches.filter((match: { dataValues: any; }) => {
       const { dataValues: homeTeamId } = match;
       return (homeTeamId.homeTeamId === team);
     });

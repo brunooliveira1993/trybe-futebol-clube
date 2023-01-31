@@ -137,7 +137,8 @@ describe('acessando a rota GET de /login', () => {
   
     response = await chai
       .request(app)
-      .get('/login/validate').set('Authorization', mockedToken);
+      .get('/login/validate')
+      .set('Authorization', mockedToken);
       
     expect(response.status).to.equal(200);
     expect(response.body.role).to.equal(jwtVerifiedMock.data.role);
