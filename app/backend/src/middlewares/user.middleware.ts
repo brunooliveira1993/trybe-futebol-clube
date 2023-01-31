@@ -35,10 +35,7 @@ const validationToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const validationTeams = async (req: Request, res: Response, next: NextFunction) => {
-  const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
-  if (!homeTeamId || !awayTeamId || !homeTeamGoals || !awayTeamGoals) {
-    return res.status(400).json({ message: 'is required' });
-  }
+  const { homeTeamId, awayTeamId } = req.body;
   const homeTeam = await Matches.findOne({ where: { homeTeamId } });
   const awayTeam = await Matches.findOne({ where: { awayTeamId } });
   if (!homeTeam || !awayTeam) {
