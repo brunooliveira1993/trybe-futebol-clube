@@ -21,6 +21,37 @@ const loginInfo = {
   password: 'secret_admin',
 }
 
+describe('testa as funções de criação e validação de Tokens', () => {
+  afterEach(()=>{
+      sinon.restore()
+    })
+  
+  it('cria um novo Token', async () => {
+    sinon.stub(jwt, 'sign').resolves(mockedToken);
+
+    const createdToken = await auth.createToken({ id: 1,
+      username: 'mock',
+      role:'mock',
+      email: 'mock@mock.com'})
+    expect(createdToken).to.equal(mockedToken);
+  })
+
+  it('valida com sucesso o novo Token', async () => {
+    sinon.stub(jwt, 'verify').resolves(jwtVerifiedMock);
+
+    const verified = await auth.verifyToken(mockedToken)
+    expect(verified).to.equal(jwtVerifiedMock);
+  });
+
+  it('falha na validação do novo Token', async () => {
+    const error = 'error'
+    sinon.stub(jwt, 'verify').throws(new Error(error));
+
+    const verified = await auth.verifyToken('mockedToken')
+    expect(verified).to.deep.equal({ isError: true });
+  });
+});
+
 describe('testando rota POST do /login', () => {
   let response: Response;
   afterEach(()=>{

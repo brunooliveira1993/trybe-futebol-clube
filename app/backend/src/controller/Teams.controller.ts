@@ -12,6 +12,7 @@ export default class teamController {
   static async getOne(req: Request, res: Response) {
     const { id } = req.params;
     const result = await TeamService.findById(Number(id));
+    if (result.type === 'NOT FOUND') return res.status(400).json(result.message);
     return res.status(200).json(result.message);
   }
 }
