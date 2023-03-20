@@ -16,7 +16,7 @@ const Games = () => {
     const token = localStorage.getItem('token') || false;
     const role = localStorage.getItem('role') || false;
     if (token) setLogin(true);
-    
+
     setIsAdm(role === 'admin');
   }, []);
 
